@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare AI - Revolutionizing Animal Healthcare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&q=80') no-repeat center;
+            background-size: cover;
+        }
+        .uploadBox {
+            border: 2px dashed #ccc;
+            transition: all 0.3s;
+        }
+        .uploadBox:hover {
+            border-color: #4CAF50;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="bg-teal-600 text-white p-4 fixed w-full z-50">
+    <div class="container mx-auto flex flex-wrap justify-between items-center">
+        <a href="#" class="text-2xl font-bold">VetCare AI</a>
+        <button class="lg:hidden" onclick="toggleMenu()">
+            <i class="bi bi-list text-2xl"></i>
+        </button>
+        <div id="menu" class="hidden lg:flex w-full lg:w-auto">
+            <a href="#home" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 hover:text-teal-200">Home</a>
+            <a href="#disease-detection" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 hover:text-teal-200">Disease Detection</a>
+            <a href="#animal-behaviour" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 hover:text-teal-200">Animal Behaviour</a>
+            <a href="#healthcare" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 hover:text-teal-200">Healthcare</a>
+            <a href="#veterinary" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 hover:text-teal-200">Veterinary</a>
+            <a href="#login" class="block mt-4 lg:inline-block lg:mt-0 px-4 py-2 bg-teal-500 rounded hover:bg-teal-400">Login</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero h-screen flex items-center justify-center text-white pt-16">
+    <div class="container mx-auto text-center px-4">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">Revolutionizing Animal Healthcare with AI</h1>
+        <p class="text-xl mb-8">VetCare AI – Caring for Your Pets Like Family</p>
+        <a href="#disease-detection" class="bg-teal-500 text-white px-8 py-3 rounded-full hover:bg-teal-400 transition">Get Started</a>
+    </div>
+</section>
+
+<!-- Key Features -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-6 bg-white rounded-lg shadow-md">
+                <i class="bi bi-search text-4xl text-teal-500"></i>
+                <h3 class="text-xl font-bold mt-4">Disease Detection</h3>
+                <p>Upload and analyze symptoms instantly using our advanced AI technology.</p>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md">
+                <i class="bi bi-heart text-4xl text-teal-500"></i>
+                <h3 class="text-xl font-bold mt-4">Animal Behaviour</h3>
+                <p>Understand your pet's behavior through AI-powered analysis.</p>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md">
+                <i class="bi bi-geo-alt text-4xl text-teal-500"></i>
+                <h3 class="text-xl font-bold mt-4">Veterinary Directory</h3>
+                <p>Find top vets and clinics in Mumbai with ease.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disease Detection Section -->
+<section id="disease-detection" class="py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Disease Detection</h2>
+        <div class="max-w-2xl mx-auto">
+            <div id="uploadBox" class="uploadBox p-8 text-center rounded-lg mb-8">
+                <i class="bi bi-cloud-upload text-4xl text-teal-500"></i>
+                <p class="mt-4">Drag and drop an image or click to upload</p>
+                <input type="file" id="fileUpload" class="hidden" accept="image/*">
+            </div>
+            <button id="analyzeBtn" class="w-full bg-teal-500 text-white py-3 rounded-lg hover:bg-teal-400 disabled:opacity-50" disabled>
+                Analyze
+            </button>
+            <div id="results" class="mt-8 hidden">
+                <h3 class="text-xl font-bold mb-4">Analysis Results</h3>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p id="resultText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Animal Behaviour Section -->
+<section id="animal-behaviour" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Animal Behaviour Analysis</h2>
+        <div class="max-w-2xl mx-auto">
+            <div id="behaviourUploadBox" class="uploadBox p-8 text-center rounded-lg mb-8">
+                <i class="bi bi-camera text-4xl text-teal-500"></i>
+                <p class="mt-4">Upload an image/video of your pet's behavior</p>
+                <input type="file" id="behaviourFileUpload" class="hidden" accept="image/*,video/*">
+            </div>
+            <button id="behaviourAnalyzeBtn" class="w-full bg-teal-500 text-white py-3 rounded-lg hover:bg-teal-400 disabled:opacity-50" disabled>
+                Analyze Behaviour
+            </button>
+            <div id="behaviourResults" class="mt-8 hidden">
+                <h3 class="text-xl font-bold mb-4">Behaviour Analysis</h3>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p id="behaviourResultText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Healthcare Section -->
+<section id="healthcare" class="py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Healthcare Resources</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Nutrition Guidelines</h3>
+                <ul class="list-disc pl-6">
+                    <li>Balanced diet recommendations</li>
+                    <li>Age-specific nutrition plans</li>
+                    <li>Dietary restrictions guide</li>
+                </ul>
+                <a href="#" class="text-teal-500 mt-4 inline-block">Download Guide</a>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Vaccination Schedule</h3>
+                <ul class="list-disc pl-6">
+                    <li>Core vaccinations timeline</li>
+                    <li>Booster shot reminders</li>
+                    <li>Species-specific requirements</li>
+                </ul>
+                <a href="#" class="text-teal-500 mt-4 inline-block">Download Schedule</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Veterinary Section -->
+<section id="veterinary" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Find Veterinary Care in Mumbai</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div id="map"></div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Veterinary Clinics</h3>
+                <div id="clinicsList" class="space-y-4">
+                    <!-- Clinics will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Login Section -->
+<section id="login" class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-3xl font-bold text-center mb-8">Login</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" class="w-full p-3 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" class="w-full p-3 border rounded" required>
+                </div>
+                <button type="submit" class="w-full bg-teal-500 text-white py-3 rounded hover:bg-teal-400">
+                    Sign In
+                </button>
+                <p class="text-center">
+                    <a href="#" class="text-teal-500">Forgot Password?</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-teal-600 text-white py-8">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">VetCare AI</h3>
+                <p>Revolutionizing animal healthcare with artificial intelligence</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="#disease-detection">Disease Detection</a></li>
+                    <li><a href="#healthcare">Healthcare</a></li>
+                    <li><a href="#veterinary">Veterinary</a></li>
+                    <li><a href="#login">Login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4">Connect With Us</h3>
+                <div class="flex space-x-4">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <p>Copyright © VetCare AI 2025. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Mobile Menu Toggle
+function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.classList.toggle('hidden');
+}
+
+// Disease Detection Upload
+const uploadBox = document.getElementById('uploadBox');
+const fileUpload = document.getElementById('fileUpload');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const results = document.getElementById('results');
+const resultText = document.getElementById('resultText');
+
+uploadBox.addEventListener('click', () => fileUpload.click());
+uploadBox.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadBox.style.borderColor = '#4CAF50';
+});
+uploadBox.addEventListener('dragleave', () => {
+    uploadBox.style.borderColor = '#ccc';
+});
+uploadBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadBox.style.borderColor = '#ccc';
+    if (e.dataTransfer.files[0]) {
+        handleFile(e.dataTransfer.files[0]);
+    }
+});
+
+fileUpload.addEventListener('change', (e) => {
+    if (e.target.files[0]) {
+        handleFile(e.target.files[0]);
+    }
+});
+
+function handleFile(file) {
+    if (file.type.startsWith('image/')) {
+        analyzeBtn.disabled = false;
+        // Preview image if needed
+    }
+}
+
+analyzeBtn.addEventListener('click', () => {
+    // Simulate analysis
+    results.classList.remove('hidden');
+    resultText.textContent = "Analysis complete. No serious conditions detected. Regular check-up recommended.";
+});
+
+// Animal Behaviour Upload
+const behaviourUploadBox = document.getElementById('behaviourUploadBox');
+const behaviourFileUpload = document.getElementById('behaviourFileUpload');
+const behaviourAnalyzeBtn = document.getElementById('behaviourAnalyzeBtn');
+const behaviourResults = document.getElementById('behaviourResults');
+const behaviourResultText = document.getElementById('behaviourResultText');
+
+// Similar event listeners for behaviour analysis
+behaviourUploadBox.addEventListener('click', () => behaviourFileUpload.click());
+behaviourFileUpload.addEventListener('change', (e) => {
+    if (e.target.files[0]) {
+        behaviourAnalyzeBtn.disabled = false;
+    }
+});
+
+behaviourAnalyzeBtn.addEventListener('click', () => {
+    behaviourResults.classList.remove('hidden');
+    behaviourResultText.textContent = "Behaviour analysis complete. Your pet shows signs of playfulness and good health.";
+});
+
+// Map Implementation
+function initMap() {
+    // Mumbai coordinates
+    const mumbai = { lat: 19.0760, lng: 72.8777 };
+    
+    const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 11,
+        center: mumbai
+    });
+
+    // Sample veterinary clinics data
+    const clinics = [
+        {
+            name: "ABC Veterinary Clinic",
+            address: "123 Andheri East, Mumbai",
+            contact: "9876543210",
+            location: { lat: 19.1136, lng: 72.8697 }
+        },
+        {
+            name: "Pet Care Center",
+            address: "456 Bandra West, Mumbai",
+            contact: "9876543211",
+            location: { lat: 19.0596, lng: 72.8295 }
+        },
+        // Add more clinics as needed
+    ];
+
+    // Add markers and populate list
+    const clinicsList = document.getElementById('clinicsList');
+    clinics.forEach(clinic => {
+        // Add marker
+        new google.maps.Marker({
+            position: clinic.location,
+            map: map,
+            title: clinic.name
+        });
+
+        // Add to list
+        const clinicElement = document.createElement('div');
+        clinicElement.className = 'p-4 border rounded';
+        clinicElement.innerHTML = `
+            <h4 class="font-bold">${clinic.name}</h4>
+            <p>${clinic.address}</p>
+            <p>Contact: ${clinic.contact}</p>
+        `;
+        clinicsList.appendChild(clinicElement);
+    });
+}
+
+// Login Form
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Add login logic here
+    alert('Login functionality will be implemented here');
+});
+</script>
+
+<!-- Google Maps Script -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
